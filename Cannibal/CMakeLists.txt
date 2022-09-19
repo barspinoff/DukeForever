@@ -1,4 +1,4 @@
-project(Cannibal CXX ASM_MASM)
+project(Cannibal CXX)
 
 add_library(Cannibal SHARED
     CorMain.cpp CorMain.h
@@ -56,6 +56,6 @@ add_library(Cannibal SHARED
 
 target_include_directories(Cannibal PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(Cannibal PRIVATE CANNIBAL_EXPORTS KRN_EXPORTS KRN_DLL XCORE_PURE)
-target_link_directories(Cannibal PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} msvcirt)
+target_link_directories(Cannibal PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(Cannibal PUBLIC xcore)
 target_link_libraries(Cannibal PRIVATE comctl32)

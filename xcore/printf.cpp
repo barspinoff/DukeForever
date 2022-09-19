@@ -181,34 +181,11 @@ public:
 
 	CPrintfT *get(U32 size)
 	{
-		if (size >= 2048)
-			return get_large(size);
-
-		U32 index,bsize;
-
-		bsize=128;
-		index=0;
-		while(size > bsize)
-		{
-			bsize<<=1;
-			index++;
-		}
-		return get_normal(index);
+		return nullptr;
 	}
 	void release(CPrintfT *obj)
 	{
-		U32 size=obj->start_size;
-
-		if (size>2048)
-		{
-			hash[4].add_head(obj);
-			return;
-		}
-
-		U32 index=_bsf(size) - 7;
-
-		hash[index].add_head(obj);
-		obj->reset();
+		
 	}
 	void flush_all(void);
 };

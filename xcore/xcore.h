@@ -76,10 +76,10 @@ extern char XCORE_API _err_printf_string[MAX_PRINTF_SIZE];
 
 extern "C" {
 /* bit scan forward support */
-XCORE_API U32 __regcall(1) _bsf(U32 value);
+//XCORE_API U32 __regcall(1) _bsf(U32 value);
 XCORE_API U32 __regcall(1) _bsfs(U32 *value);
 /* string functions */
-XCORE_API U32 __regcall(1) fstrlen(CC8 *str);
+__forceinline U32 __regcall(1) fstrlen(CC8* str) { return strlen(str); }
 XCORE_API charp __regcall(2) fstrcpy(char *dst,CC8 *src);
 XCORE_API U32 __regcall(3) fstrncpy(char *dst,CC8 *src,U32 size);
 XCORE_API charp __regcall(2) fstrcpy_tolower(char *dst,CC8 *src);
@@ -116,8 +116,8 @@ XCORE_API U32 __regcall(1) file_exist(CC8 *path);
 
 #define fsetlower(x) (x + (_app_char_flags[((U8)(x))] & NS_STRING::KEY_UPPER))
 
-void begin_tick(U64 *tick);
-void end_tick(U64 *tick);
+__forceinline void begin_tick(U64 *tick) { }
+__forceinline void end_tick(U64 *tick) { }
 
 XCORE_API U32 _test_leak(void);
 }

@@ -55,6 +55,8 @@ public:
 	NInt m_Int;
 	NFloat m_Float;
 
+	void* pointer;
+
 	virtual NChar* GetString() { return(m_String); }
 	virtual NInt GetInt() { return(m_Int); }
 	virtual NFloat GetFloat() { return(m_Float); }

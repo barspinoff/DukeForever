@@ -92,11 +92,9 @@ void xxx_printf_noglobal(U32 error_level,CC8 *string,...)
 	exit(1);
 }
 
-#if 0
 void xxx_printf(U32 error_level,CC8 *string,...)
 {
 }
-#endif
 
 void CError::assert(CC8 *file,U32 line)
 {

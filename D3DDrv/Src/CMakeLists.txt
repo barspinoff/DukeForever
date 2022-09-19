@@ -1,4 +1,4 @@
-project(D3DDrv CXX ASM_MASM)
+project(D3DDrv CXX)
 
 add_library(D3DDrv SHARED Direct3D8.cpp)
 target_compile_definitions(D3DDrv PRIVATE _UNICODE UNICODE)

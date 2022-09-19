@@ -1,4 +1,4 @@
-project(xcore CXX ASM_NASM)
+project(xcore CXX)
 
 # TODO
 # flagdata.cpp is supposed to be a generated source file,
@@ -14,9 +14,6 @@ add_library(xcore SHARED
     xmisc.cpp flagdata.cpp stdcore.cpp
     xcore.def
 )
-
-# The assembly files in xcore need to be assembled using NASM, rather than MASM.
-set_source_files_properties(malloc.asm stuff.asm PROPERTIES LANGUAGE ASM_NASM)
 
 target_compile_definitions(xcore PRIVATE XCORE_LIBRARY)
 target_include_directories(xcore PUBLIC ${CMAKE_SOURCE_DIR}/Core/Inc ${CMAKE_CURRENT_SOURCE_DIR})

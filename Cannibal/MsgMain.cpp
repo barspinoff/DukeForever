@@ -47,9 +47,12 @@ enum
 #define MSG_HASHBUCKETS		(1<<MSG_HASHBITS)
 #define MSG_HASHMASK		(MSG_HASHBITS-1)
 
-extern "C"{
-NBool msg_call_stack(IMsg *msg,IMsgTarget *target,CC8 *pstr,U32 argc,IMsgToken *token,void *func);
+NBool msg_call_stack(IMsg* msg, IMsgTarget* target, CC8* pstr, U32 argc, IMsgToken* token, void* func) {
+	int (*msg_func)(...) = (int(__cdecl*)(...))func;
+
+	return msg_func(target, msg, msg->m_Argv[1].pointer, msg->m_Argv[2].pointer, msg->m_Argv[3].pointer, msg->m_Argv[4].pointer, msg->m_Argv[5].pointer, msg->m_Argv[6].pointer, msg->m_Argv[7].pointer, msg->m_Argv[8].pointer, msg->m_Argv[9].pointer, msg->m_Argv[10].pointer);
 }
+
 
 //============================================================================
 //    CLASSES / STRUCTURES
@@ -296,6 +299,12 @@ wouldUseContinueKeywordIfPossible:
 	return(r);
 }
 
+int PASSFLOAT(float x) {
+	float	floatTemp;
+	floatTemp = x;
+	return *(int*)&floatTemp;
+}
+
 static NBool MSG_StaticMsg(IMsgRouter* inRouter, IMsgTarget* inTarget, NChar* inText)
 {
 	IMsg theMsg;
@@ -319,41 +328,49 @@ static NBool MSG_StaticMsg(IMsgRouter* inRouter, IMsgTarget* inTarget, NChar* in
 			sprintf(t->m_String, "%0.*s", lextoken.lexemeLen, lextoken.lexeme);
 			t->m_Float = (NFloat)atof(t->m_String);
 			t->m_Int = (NInt)t->m_Float;
+			t->pointer = &t->m_String;
 			break;
 		case MSGTOKEN_String:
 			sprintf(t->m_String, "%0.*s", lextoken.lexemeLen-2, lextoken.lexeme+1);
 			t->m_Float = (NFloat)atof(t->m_String);
 			t->m_Int = (NInt)t->m_Float;
+			t->pointer = &t->m_String;
 			break;
 		case MSGTOKEN_Character:
 			sprintf(t->m_String, "%0.*s", lextoken.lexemeLen-2, lextoken.lexeme+1);
 			t->m_Int = STR_Chartoi(t->m_String);
 			t->m_Float = (NFloat)t->m_Int;
+			t->pointer = &t->m_String;
 			break;
 		case MSGTOKEN_Integer:
 			sprintf(t->m_String, "%0.*s", lextoken.lexemeLen, lextoken.lexeme);
 			t->m_Int = (NInt)atoi(t->m_String);
 			t->m_Float = (NFloat)t->m_Int;
+			t->pointer = (void *)t->m_Int;
 			break;
 		case MSGTOKEN_HexInteger:
 			sprintf(t->m_String, "%0.*s", lextoken.lexemeLen, lextoken.lexeme);
 			t->m_Int = STR_Hexatoi(t->m_String);
 			t->m_Float = (NFloat)t->m_Int;
+			t->pointer = (void*)t->m_Int;
 			break;
 		case MSGTOKEN_BinInteger:
 			sprintf(t->m_String, "%0.*s", lextoken.lexemeLen, lextoken.lexeme);
 			t->m_Int = STR_Binatoi(t->m_String);
 			t->m_Float = (NFloat)t->m_Int;
+			t->pointer = &t->m_Int;
 			break;
 		case MSGTOKEN_OctInteger:
 			sprintf(t->m_String, "%0.*s", lextoken.lexemeLen, lextoken.lexeme);
 			t->m_Int = STR_Octatoi(t->m_String);
 			t->m_Float = (NFloat)t->m_Int;
+			t->pointer = (void*)t->m_Int;
 			break;
 		case MSGTOKEN_Float:
 			sprintf(t->m_String, "%0.*s", lextoken.lexemeLen, lextoken.lexeme);
 			t->m_Float = (NFloat)atof(t->m_String);
 			t->m_Int = (NInt)t->m_Float;
+			t->pointer = (void *)PASSFLOAT(t->m_Float);
 			break;
 		default:
 			break;

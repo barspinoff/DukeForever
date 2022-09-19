@@ -189,67 +189,17 @@ ErrMem::~ErrMem(void)
 
 char *ErrMem::get(U32 size)
 {
-	ErrMem *emem=(ErrMem *)TlsGetValue(tls_index);
-
-	if (!emem)
-		return null;
-
-	size=ALIGN_POW2(size,ERR_MEM_CHUNK);
-	U32 bits=size/ERR_MEM_CHUNK;
-
-	if (bits>32)
-		return null;
-
-	U32 loc=_bsf(emem->rotate) - 1;
-
-	/* wrap memory, start at beginning */
-	if ((loc+bits)>32)
-	{
-		emem->rotate=1<<bits;
-		return emem->def_mem;
-	}
-	
-	char *ptr=emem->def_mem+(loc*ERR_MEM_CHUNK);
-	_rotl(rotate,bits);
-	return ptr;
+	return nullptr;
 }
 
 char *ErrMem::get_more(char *mem,U32 inc_size)
 {
-	ErrMem *emem=(ErrMem *)TlsGetValue(tls_index);
-	
-	if (!emem)
-		return null;
-
-	inc_size=ALIGN_POW2(inc_size,ERR_MEM_CHUNK);
-	U32 bits=inc_size/ERR_MEM_CHUNK;
-
-	U32 off=(U32)(mem - emem->def_mem);
-	
-	off/=ERR_MEM_CHUNK;
-	U32 end=(_bsf(emem->rotate) - 1);
-
-	U32 total_bits=end - off + bits;
-
-	/* if asking for too much */
-	if (total_bits>32)
-		return null;
-
-	/* wrap memory, start at beginning */
-	if ((end + bits) > 32)
-	{
-		emem->rotate=_rotl(1,total_bits);
-		return emem->def_mem;
-	}
-
-	_rotl(emem->rotate,bits);
-	return mem;
+	return nullptr;
 }
 
 void ErrMem::add_thread(void)
 {
-	ErrMem *emem=(ErrMem *)xmalloc(sizeof(ErrMem));
-	TlsSetValue(tls_index,emem);
+	
 }
 
 void ErrMem::remove_thread(void)
